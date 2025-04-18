@@ -1,7 +1,7 @@
 # Docker Web App
 ## Authors: Youcef Islam CHEHBOUB & Soufiane ALAEDDINE
 
-This project demonstrates how to set up and run a web application using Docker. You can run the project in two ways: using a `Makefile` or Docker Compose.
+This project demonstrates how to set up and run a web application using Docker.
 
 ## Cloning the Repository
 
