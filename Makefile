@@ -1,4 +1,3 @@
-# Part 1: Manual Docker Commands
 .PHONY: manual-up manual-test manual-down
 
 manual-up: 
@@ -39,7 +38,6 @@ manual-down:
 		echo Removing site_network && docker network rm site_network \
 	) else (echo site_network does not exist)
 	
-# Part 2: Docker Compose
 .PHONY: compose-up compose-test compose-down
 
 compose-up: clean
@@ -57,7 +55,6 @@ compose-down:
 	@echo Stopping and removing Docker Compose resources...
 	docker compose down -v
 
-# Add a clean target to stop and remove all containers before starting any task
 .PHONY: clean
 clean:
 	@echo Cleaning up all Docker resources...
@@ -65,7 +62,6 @@ clean:
 	@docker network prune -f 2>NUL || echo No networks to prune
 	@docker volume prune -f 2>NUL || echo No volumes to prune
 
-# Help
 .PHONY: help
 help:
 	@echo Available targets:
@@ -86,13 +82,3 @@ run-all:
 	$(MAKE) compose-up
 	$(MAKE) compose-test
 	$(MAKE) compose-down
-
-# Part 1 (Manual Docker commands):
-# make manual-up      # Start the containers
-# make manual-test    # Test the application
-# make manual-down    # Clean up resources
-
-# Part 2 (Docker Compose):
-# make compose-up     # Start the containers
-# make compose-test   # Test the application
-# make compose-down   # Clean up resources

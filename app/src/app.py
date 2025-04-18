@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-# MySQL configuration
-# Load environment variables from .env file
 load_dotenv()
 
 db_config = {

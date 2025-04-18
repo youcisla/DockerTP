@@ -1,4 +1,3 @@
-# Check if networks exist before creating them
 if (-not (docker network ls --filter name=db_network -q)) {
     docker network create db_network
 }
@@ -6,14 +5,11 @@ if (-not (docker network ls --filter name=site_network -q)) {
     docker network create site_network
 }
 
-# Create volume
 docker volume create db_volume
 
-# Build images
 docker build -t mysql:latest -f mysql/Dockerfile .
 docker build -t app:latest -f app/Dockerfile .
 
-# Run MySQL container
 docker run -d `
     --name mysql_container `
     --network db_network `
@@ -24,7 +20,6 @@ docker run -d `
     -p 3306:3306 `
     mysql:latest
 
-# Wait for MySQL to be healthy
 Write-Host "Waiting for MySQL container to be healthy..."
 for ($i = 0; $i -lt 5; $i++) {
     $health = docker inspect --format='{{.State.Health.Status}}' mysql_container
@@ -39,7 +34,6 @@ for ($i = 0; $i -lt 5; $i++) {
     }
 }
 
-# Run App container
 docker run -d `
     --name app_container `
     --network site_network `
@@ -50,10 +44,8 @@ docker run -d `
     -e MYSQL_DATABASE=testdb `
     app:latest
 
-# Connect App container to db_network
 docker network connect db_network app_container
 
-# Wait for App to be healthy
 Write-Host "Waiting for App container to be healthy..."
 for ($i = 0; $i -lt 5; $i++) {
     try {
@@ -72,7 +64,6 @@ for ($i = 0; $i -lt 5; $i++) {
     }
 }
 
-# Run Nginx container
 docker run -d `
     --name nginx_container `
     --network site_network `
@@ -80,5 +71,4 @@ docker run -d `
     -v ${PWD}/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro `
     nginx:latest
 
-# Verify containers are running
 docker ps
